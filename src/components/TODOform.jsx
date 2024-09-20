@@ -1,19 +1,21 @@
 import React, { useState} from "react";
-
+import TODOui from "./TODOui";
 function TODOform() {
 
   const [title, settitle] = useState("");
-  const [status, setstatus] = useState("false");
   const [mainTask, setmainTask] = useState([]);
-  const [complete, setcomplete] = useState([]);
+ 
 
   function submitHandler(e)
   {
     e.preventDefault();
-    setmainTask([...mainTask, {title}])
+    if (title.length>0) {
+      
+    
+    let newTask = { title , status:false };
+    setmainTask([...mainTask, newTask])
     settitle("");
-    setcomplete([...mainTask,{status} ])
-    console.log (complete);
+  }
     
       
   };
@@ -22,15 +24,25 @@ function TODOform() {
     cTask.splice(i,1)
     setmainTask(cTask)
     
-  } 
+  }
+  function toggleStatus(i) {
+    let updatedTasks = [...mainTask];
+    updatedTasks[i].status = updatedTasks[i].status === "true" ? "false" : "true";
+    setmainTask(updatedTasks);
+  }
+      
+    const todos_completed = mainTask.filter(
+      (e) => e.status === "true"
+    ).length;
+
   let renderTask =<p>No Task Available</p>
     if (mainTask.length>0) {
       renderTask =mainTask.map((t,i)=>{
         return <div key={i} className="flex justify-between items-center w-full p-2 ">
           <div className="flex items-center space-x-2 gap-3">
-         <button onClick={()=>{setstatus(!status)}} className="">
-          0  
-         </button>
+          <button onClick={() => toggleStatus(i)} className="">
+              {t.status === "true" ? "✔️" : "🔴"} 
+            </button>
          
           
           {t.title}
@@ -46,6 +58,7 @@ function TODOform() {
     }  
     return (
       <>
+      <TODOui todos_completed={todos_completed} total_todos={mainTask.length}/>
         <form onSubmit={(e)=> submitHandler(e)} >
           <div className="flex gap-3 py-12">
 
