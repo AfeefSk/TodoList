@@ -1,11 +1,23 @@
-import React, { useState} from "react";
+import React, { useState,useEffect} from "react";
 import TODOui from "./TODOui";
 function TODOform() {
 
-  const [title, settitle] = useState("");
-  const [mainTask, setmainTask] = useState([]);
- 
+  const getLocalSorage = () =>{
+    let list =localStorage.getItem('list')
+    if(list){
+      return JSON.parse(localStorage.getItem('list'));
+    }else {
+      return [];
+    }
+}
 
+  const [title, settitle] = useState("");
+  const [mainTask, setmainTask] = useState(getLocalSorage());
+  
+  useEffect(() => {
+    localStorage.setItem('list',JSON.stringify(mainTask))
+  }, [mainTask])
+    
   function submitHandler(e)
   {
     e.preventDefault();
@@ -14,6 +26,7 @@ function TODOform() {
     
     let newTask = { title , status:false };
     setmainTask([...mainTask, newTask])
+    
     settitle("");
   }
     
@@ -24,11 +37,13 @@ function TODOform() {
     cTask.splice(i,1)
     setmainTask(cTask)
     
+    
   }
   function toggleStatus(i) {
     let updatedTasks = [...mainTask];
     updatedTasks[i].status = updatedTasks[i].status === "true" ? "false" : "true";
     setmainTask(updatedTasks);
+    
   }
       
     const todos_completed = mainTask.filter(
@@ -41,7 +56,7 @@ function TODOform() {
         return <div key={i} className="flex justify-between items-center w-full p-2 ">
           <div className="flex items-center space-x-2 gap-3">
           <button onClick={() => toggleStatus(i)} className="">
-              {t.status === "true" ? "✔️" : "🔴"} 
+              {t.status === "true" ? "✔️" : "❌"} 
             </button>
          
           

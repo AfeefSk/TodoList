@@ -7,7 +7,7 @@ function App() {
   
   return (
     <>
-    <div className="w-full h-full bg-fuchsia-500 flex flex-wrap justify-center border-none py-80 ">
+    <div className="w-full h-full bg-fuchsia-500 flex flex-wrap justify-center border-none py-80 select-none ">
     <div className="w-max h-max py-28 px-28 bg-fuchsia-600 shadow-2xl shadow-slate-900 ">
     <Header/>
     <br/><br/><br/>
